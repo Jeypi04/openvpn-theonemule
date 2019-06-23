@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # defaults 
-ADMINPASSWORD="secret"
+ADMINPASSWORD="1234"
 DNS1="8.8.8.8"
 DNS2="8.8.4.4"
-PROTOCOL=udp
-PORT=1194
+PROTOCOL=tcp
+PORT=465
 HOST=$(wget -4qO- "http://whatismyip.akamai.com/")
 
 
@@ -35,7 +35,7 @@ do
 	esac
 done
 
-[ "${ADMINPASSWORD}" == "secret" ] && echo "fatal: password is not set" && exit 1
+[ "${ADMINPASSWORD}" == "1234" ] && echo "fatal: password is not set" && exit 1
 
 # Detect Debian users running the script with "sh" instead of bash
 if readlink /proc/$$/exe | grep -qs "dash"; then
@@ -131,7 +131,6 @@ ca ca.crt
 cert server.crt
 key server.key
 dh dh.pem
-tls-auth ta.key 0
 topology subnet
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
@@ -141,7 +140,8 @@ echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $DNS1\"" >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $DNS2\"" >> /etc/openvpn/server.conf
 echo "keepalive 10 120
-cipher AES-256-CBC
+cipher none
+auth none
 
 user nobody
 group $GROUPNAME
@@ -239,7 +239,8 @@ nobind
 persist-key
 persist-tun
 remote-cert-tls server
-cipher AES-256-CBC
+cipher none
+auth none
 setenv opt block-outside-dns
 key-direction 1
 verb 3" > /etc/openvpn/client-common.txt
