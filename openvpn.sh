@@ -118,9 +118,6 @@ cp pki/ca.crt pki/private/ca.key pki/dh.pem pki/issued/server.crt pki/private/se
 # CRL is read with each client connection, when OpenVPN is dropped to nobody
 chown nobody:$GROUPNAME /etc/openvpn/crl.pem
 
-# Generate key for tls-auth
-openvpn --genkey --secret /etc/openvpn/ta.key
-
 # Generate server.conf
 echo "port $PORT
 proto $PROTOCOL
@@ -140,8 +137,8 @@ echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $DNS1\"" >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $DNS2\"" >> /etc/openvpn/server.conf
 echo "keepalive 10 120
-cipher none
 auth none
+cipher none
 
 user nobody
 group $GROUPNAME
@@ -239,8 +236,8 @@ nobind
 persist-key
 persist-tun
 remote-cert-tls server
-cipher none
 auth none
+cipher none
 setenv opt block-outside-dns
 key-direction 1
 verb 3" > /etc/openvpn/client-common.txt
