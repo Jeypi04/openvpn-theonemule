@@ -125,9 +125,7 @@ dev tun
 sndbuf 0
 rcvbuf 0
 ca ca.crt
-cert server.crt
 key server.key
-dh dh.pem
 topology subnet
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
@@ -235,7 +233,6 @@ resolv-retry infinite
 nobind
 persist-key
 persist-tun
-remote-cert-tls server
 auth none
 cipher none
 setenv opt block-outside-dns
